@@ -2,16 +2,28 @@
 
 /*
 |--------------------------------------------------------------------------
-| Suppress PHP 8.4 Deprecation Warnings
+| Suppress PHP 8.1+ Deprecation Warnings
 |--------------------------------------------------------------------------
 |
-| Laravel 8 is not fully compatible with PHP 8.4, causing many deprecation
-| warnings. We suppress these warnings to clean up the output while
-| maintaining functionality.
+| Laravel 8 is not fully compatible with PHP 8.1+, causing many deprecation
+| warnings and errors. We suppress these warnings to clean up the output while
+| maintaining functionality. This includes fixes for PHP 8.1, 8.2, 8.3, and 8.4.
 |
 */
 
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED & ~E_NOTICE);
+
+// Additional PHP 8.1+ compatibility fixes
+if (version_compare(PHP_VERSION, '8.1.0', '>=')) {
+    // Handle dynamic property deprecation warnings
+    ini_set('display_errors', 0);
+    ini_set('log_errors', 1);
+    
+    // Set default timezone if not set to prevent warnings
+    if (!ini_get('date.timezone')) {
+        date_default_timezone_set('UTC');
+    }
+}
 
 /*
 |--------------------------------------------------------------------------
